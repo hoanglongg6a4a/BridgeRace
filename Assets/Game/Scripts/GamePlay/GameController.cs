@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameController : MonoBehaviour
 {
@@ -16,6 +17,10 @@ public class GameController : MonoBehaviour
             Debug.Log(parameter.color);
             //spawner.Init(parameter.color, cameraFollow.SetPlayer);
             Destroy(receive);
+        }
+        else
+        {
+            SceneManager.LoadScene(Constansts.HomeScence);
         }
     }
 

@@ -27,4 +27,5 @@ public static class Constansts
 
     //Scene
     public const string GameplayScene = "Game/Scenes/GamePlay";
+    public const string HomeScence = "Game/Scenes/SampleScene";
 }

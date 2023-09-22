@@ -46,6 +46,7 @@ public class HomeController : MonoBehaviour
     }
     public void PrevButton()
     {
+        Debug.Log("có vào");
         indexChar--;
         indexChar = indexChar < 0 ? 3 : indexChar;
         InitColor(indexChar);
