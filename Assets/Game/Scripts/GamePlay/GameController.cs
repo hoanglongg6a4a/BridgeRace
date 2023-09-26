@@ -8,6 +8,8 @@ public class GameController : MonoBehaviour
     [Header("Preference")]
     [SerializeField] private List<MaterialColor> listMaterial;
     [SerializeField] private CameraFollow cameraFollow;
+    [SerializeField] private Spawner spawner;
+    //[SerializeField] private  joystick;
     void Start()
     {
         GameObject receive = GameObject.FindGameObjectWithTag("Param");
@@ -15,7 +17,7 @@ public class GameController : MonoBehaviour
         {
             Parameter parameter = receive.GetComponent<Parameter>();
             Debug.Log(parameter.color);
-            //spawner.Init(parameter.color, cameraFollow.SetPlayer);
+            spawner.Init(listMaterial, parameter.color, cameraFollow.SetPlayer);
             Destroy(receive);
         }
         else
