@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7573036376604802534}
   - component: {fileID: 2539688049627198576}
   - component: {fileID: 7620578424316770208}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GateOut
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -109,7 +109,7 @@ GameObject:
   - component: {fileID: 5776976395620825348}
   - component: {fileID: 5776976395620825351}
   - component: {fileID: 5776976395620825350}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: GateIn
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -4,7 +4,7 @@ using UnityEngine.SceneManagement;
 
 public enum BrickColor
 {
-    Blue, Orange, Purple, Red, Greay
+    Blue, Orange, Purple, Red, Grey, None
 }
 [System.Serializable]
 public class MaterialColor

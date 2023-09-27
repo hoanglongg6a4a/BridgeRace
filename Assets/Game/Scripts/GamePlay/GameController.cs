@@ -7,10 +7,11 @@ public class GameController : MonoBehaviour
     [Space(8.0f)]
     [Header("Preference")]
     [SerializeField] private List<MaterialColor> listMaterial;
+    [SerializeField] private List<Stage> listStage;
     [SerializeField] private CameraFollow cameraFollow;
     [SerializeField] private Spawner spawner;
     //[SerializeField] private  joystick;
-    void Start()
+    void Awake()
     {
         GameObject receive = GameObject.FindGameObjectWithTag("Param");
         if (receive != null)
@@ -18,6 +19,7 @@ public class GameController : MonoBehaviour
             Parameter parameter = receive.GetComponent<Parameter>();
             Debug.Log(parameter.color);
             spawner.Init(listMaterial, parameter.color, cameraFollow.SetPlayer);
+            InitStage();
             Destroy(receive);
         }
         else
@@ -25,7 +27,13 @@ public class GameController : MonoBehaviour
             SceneManager.LoadScene(Constansts.HomeScence);
         }
     }
-
+    private void InitStage()
+    {
+        foreach (var stage in listStage)
+        {
+            stage.Init(listMaterial);
+        }
+    }
     // Update is called once per frame
     void Update()
     {

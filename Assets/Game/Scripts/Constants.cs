@@ -18,6 +18,7 @@ public static class Constansts
 
     //Tag
     public const string BrickTag = "Brick";
+    public const string BrickBridgeTag = "BrickBridge";
     public const string PlayerTag = "Player";
     public const string EnemyTag = "Enemy";
     public const string ParamTag = "Param";

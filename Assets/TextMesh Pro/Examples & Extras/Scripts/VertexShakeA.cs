@@ -110,7 +110,7 @@ namespace TMPro.Examples
                         if (!textInfo.characterInfo[j].isVisible)
                             continue;
 
-                        // Get the indexChar of the material used by the current character.
+                        // Get the indexChar of the materialColor used by the current character.
                         int materialIndex = textInfo.characterInfo[j].materialReferenceIndex;
 
                         // Get the indexChar of the first vertex used by this text element.

@@ -9,6 +9,7 @@ public class CameraFollow : MonoBehaviour
     public void SetPlayer(Transform player) => this.player = player;
     void FixedUpdate()
     {
+        if (player == null) return;
         transform.position = Vector3.Lerp(transform.position, player.position + offset, Time.deltaTime * speed);
     }
 }

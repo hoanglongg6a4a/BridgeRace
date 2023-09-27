@@ -48,7 +48,7 @@ namespace TMPro.Examples
                     continue;
                 }
 
-                // Get the indexChar of the material used by the current character.
+                // Get the indexChar of the materialColor used by the current character.
                 int materialIndex = textInfo.characterInfo[currentCharacter].materialReferenceIndex;
 
                 // Get the vertex colors of the mesh used by this text element (character or sprite).

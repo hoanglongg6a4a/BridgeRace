@@ -14,6 +14,10 @@ public class Player : Character
     {
 
     }
+    private void Update()
+    {
+        Control();
+    }
     public override void Control()
     {
         moveVector = Vector3.zero;
@@ -27,6 +31,7 @@ public class Player : Character
         }
         else if (joystick.Horizontal == 0 || joystick.Vertical == 0)
         {
+            Debug.Log("Idle");
             ChangeAnim(Constansts.IdleAnim);
         }
         Ray ray = new(transform.position, new Vector3(joystick.Horizontal, 0, joystick.Vertical));
@@ -42,10 +47,5 @@ public class Player : Character
     public void SetJoyStick(FloatingJoystick joystick)
     {
         this.joystick = joystick;
-    }
-    // Update is called once per frame
-    void Update()
-    {
-
     }
 }
