@@ -18,7 +18,7 @@ public class GameController : MonoBehaviour
         {
             Parameter parameter = receive.GetComponent<Parameter>();
             Debug.Log(parameter.color);
-            spawner.Init(listMaterial, parameter.color, cameraFollow.SetPlayer);
+            spawner.Init(listMaterial, parameter.color, cameraFollow.SetPlayer, listStage);
             InitStage();
             Destroy(receive);
         }
@@ -31,7 +31,7 @@ public class GameController : MonoBehaviour
     {
         foreach (var stage in listStage)
         {
-            stage.Init(listMaterial);
+            stage.Init(listMaterial, listStage.IndexOf(stage));
         }
     }
     // Update is called once per frame

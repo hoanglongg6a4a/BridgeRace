@@ -1,6 +1,16 @@
+using System;
+using UnityEngine;
+
 public class BrickBridge : Brick
 {
-    // Start is called before the first frame update
+    [SerializeField] private Bridge bridge;
+    public Func<MaterialColor, bool> CheckPassBridge;
+    public Action<MaterialColor> NextStage;
+    public void Init(Func<MaterialColor, bool> CheckPassBridge, Action<MaterialColor> NextStage)
+    {
+        this.CheckPassBridge = CheckPassBridge;
+        this.NextStage = NextStage;
+    }
     void Start()
     {
 

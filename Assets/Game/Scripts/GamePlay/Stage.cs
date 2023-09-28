@@ -3,22 +3,45 @@ using UnityEngine;
 
 public class Stage : MonoBehaviour
 {
+    [SerializeField] private int index;
+    [SerializeField] private List<MaterialColor> listMaterial;
+    [SerializeField] private List<Brick> listBrick = new();
+    [SerializeField] private List<Bridge> listBridge;
     [SerializeField] private Vector2Int size;
     [SerializeField] private float cellSize = 2f;
-    [SerializeField] private List<MaterialColor> listMaterial;
-    [SerializeField] private List<Bridge> listBridge;
-    [SerializeField] private List<Brick> listBrick = new();
-    [SerializeField] private List<Brick> listBrickRandom = new();
     [SerializeField] private Transform brickHolder;
     [SerializeField] private Brick brickPrefab;
+    private List<Brick> listBrickRandom = new();
     private Brick[,] tableBrick;
     void Start()
     {
         SpawnBrick();
+        CheckStageIndex();
     }
-    public void Init(List<MaterialColor> listMaterial)
+    public void Init(List<MaterialColor> listMaterial, int index)
     {
         this.listMaterial = listMaterial;
+        this.index = index;
+    }
+    public void CheckStageIndex()
+    {
+        if (index != 0)
+        {
+            foreach (Brick brick in listBrick)
+            {
+                brick.gameObject.SetActive(false);
+            }
+        }
+    }
+    public void ShowBrick(MaterialColor color)
+    {
+        foreach (Brick brick in listBrick)
+        {
+            if (brick.MaterialColor == color)
+            {
+                brick.gameObject.SetActive(true);
+            }
+        }
     }
     public void SpawnBrick()
     {
@@ -27,14 +50,15 @@ public class Stage : MonoBehaviour
         {
             for (int j = 0; j < size.y; j++)
             {
-                float PosX = (-size.x / 2 + i) * cellSize + 1f;
+                float PosX = (-size.x / 2 + i) * cellSize + 0.5f;
                 float PosZ = (size.y / 2 - j) * cellSize;
                 Vector3 pos = new(PosX, 0.1f, PosZ);
-                Brick prefab = Instantiate(brickPrefab, pos, Quaternion.identity);
+                Brick prefab = Instantiate(brickPrefab, Vector3.zero, Quaternion.identity);
                 listBrick.Add(prefab);
                 listBrickRandom.Add(prefab);
                 tableBrick[i, j] = prefab;
                 prefab.transform.SetParent(brickHolder);
+                prefab.transform.localPosition = pos;
             }
         }
         RandomColorBrick();
@@ -46,7 +70,6 @@ public class Stage : MonoBehaviour
         {
             for (int j = 0; j < NumberOfType; j++)
             {
-                Debug.Log("I: " + i + "+j: " + j);
                 int index = Random.Range(0, listBrickRandom.Count - 1);
                 listBrickRandom[index].SetMaterial(listMaterial[i]);
                 listBrickRandom.Remove(listBrickRandom[index]);

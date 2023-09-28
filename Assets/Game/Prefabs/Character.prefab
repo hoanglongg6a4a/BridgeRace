@@ -590,7 +590,7 @@ GameObject:
   m_Layer: 0
   m_Name: Character
   m_TagString: Player
-  m_Icon: {fileID: 0}
+  m_Icon: {fileID: 7250588514170254948, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -675,15 +675,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0d05b6b817e7c644784c1b6cd9f39c8a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  listBrick: []
   animator: {fileID: 5408615818983927166}
   skinnedMeshRenderer: {fileID: 2463172112899731626}
   materialColor:
     brickColor: 0
     material: {fileID: 0}
   rb: {fileID: 2096196762282898202}
-  listBrick: []
   brickHolder: {fileID: 2998616342642356215}
   brickPrefab: {fileID: -4155028080227848394, guid: a938d9291032aca4480b7102d5b1a795, type: 3}
+  CurrentState: 0
   moveSpeed: 50
   joystick: {fileID: 0}
   brickBrigeLayer:

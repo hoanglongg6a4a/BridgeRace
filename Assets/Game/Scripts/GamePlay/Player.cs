@@ -6,7 +6,6 @@ public class Player : Character
     [SerializeField] private FloatingJoystick joystick;
     [SerializeField] private LayerMask brickBrigeLayer;
     [SerializeField] private LayerMask wallLayer;
-    private bool isControl = true;
     private Vector3 moveVector;
     private RaycastHit hit;
     private RaycastHit hitWall;
@@ -16,6 +15,7 @@ public class Player : Character
     }
     private void Update()
     {
+        if (!isControl) return;
         Control();
     }
     public override void Control()
@@ -31,14 +31,14 @@ public class Player : Character
         }
         else if (joystick.Horizontal == 0 || joystick.Vertical == 0)
         {
-            Debug.Log("Idle");
+            //Debug.Log("Idle");
             ChangeAnim(Constansts.IdleAnim);
         }
         Ray ray = new(transform.position, new Vector3(joystick.Horizontal, 0, joystick.Vertical));
         if (Physics.Raycast(ray, out hitWall, 1f, wallLayer))
         {
             moveSpeed = 0f;
-            Debug.Log(hitWall.collider.name);
+            //Debug.Log(hitWall.collider.name);
         }
         else moveSpeed = 5f;
         Debug.DrawRay(transform.position, new Vector3(joystick.Horizontal, 0, joystick.Vertical), UnityEngine.Color.red);

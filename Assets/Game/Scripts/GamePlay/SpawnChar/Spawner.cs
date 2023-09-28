@@ -10,6 +10,7 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Enemy enemyPrefab;
     [SerializeField] private FloatingJoystick joystick;
     [SerializeField] private List<Transform> listStartPoint;
+    [SerializeField] private List<Stage> stages;
     private List<MaterialColor> listMaterial;
     private Action<Transform> setPlayer;
     private BrickColor color;
@@ -19,11 +20,12 @@ public class Spawner : MonoBehaviour
         SpawnPlayer();
         SpawnEnenmy();
     }
-    public void Init(List<MaterialColor> listMaterial, BrickColor color, Action<Transform> setPlayer)
+    public void Init(List<MaterialColor> listMaterial, BrickColor color, Action<Transform> setPlayer, List<Stage> stages)
     {
         this.listMaterial = listMaterial;
         this.color = color;
         this.setPlayer = setPlayer;
+        this.stages = stages;
     }
     public void SpawnEnenmy()
     {
@@ -31,16 +33,15 @@ public class Spawner : MonoBehaviour
         for (int i = 0; i < newListColor.Count; i++)
         {
             Enemy prefab = Instantiate(enemyPrefab, listStartPoint[i].position, Quaternion.identity);
-            prefab.transform.SetParent(listStartPoint[i].transform);
-            prefab.SetMaterial(newListColor[i]);
+            prefab.Init(listMaterial, listStartPoint[i].transform, newListColor[i], stages);
         }
     }
     public void SpawnPlayer()
     {
         Player prefab = Instantiate(playerPrefab, listStartPoint[3].position, Quaternion.identity);
         prefab.transform.SetParent(listStartPoint[3]);
+        prefab.Init(listMaterial, listStartPoint[3], listMaterial.First(colorM => colorM.BrickColor == color), stages);
         setPlayer(prefab.transform);
-        prefab.SetMaterial(listMaterial.First(colorM => colorM.BrickColor == color));
         prefab.SetJoyStick(joystick);
     }
 

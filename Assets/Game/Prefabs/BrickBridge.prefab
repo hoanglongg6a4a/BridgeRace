@@ -18,7 +18,7 @@ GameObject:
   m_TagString: BrickBridge
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
+  m_StaticEditorFlags: 2147483647
   m_IsActive: 1
 --- !u!4 &6758835214196169517
 Transform:
@@ -114,3 +114,4 @@ MonoBehaviour:
   materialColor:
     brickColor: 5
     material: {fileID: 0}
+  bridge: {fileID: 0}
