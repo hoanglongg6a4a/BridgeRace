@@ -6,26 +6,23 @@ using UnityEngine;
 
 public abstract class Character : MonoBehaviour
 {
-    [SerializeField] private List<Brick> listBrick;
-    [SerializeField] private List<Stage> stages;
-    [SerializeField] private List<MaterialColor> listColor;
+    [SerializeField] protected List<Brick> listBrick;
+    [SerializeField] protected List<Stage> stages;
+    [SerializeField] protected List<MaterialColor> listColor;
     [SerializeField] protected Animator animator;
     [SerializeField] protected SkinnedMeshRenderer skinnedMeshRenderer;
     [SerializeField] protected MaterialColor materialColor;
     [SerializeField] protected Rigidbody rb;
     [SerializeField] protected Transform brickHolder;
     [SerializeField] protected Brick brickPrefab;
-    [SerializeField] private int currentState = 0;
+    [SerializeField] protected int currentStage = 0;
+    [SerializeField] protected bool isControl = true;
     protected bool isColide = false;
-    protected bool isControl = true;
     protected string currentAnim;
     public List<Brick> ListBrick { get => listBrick; set => listBrick = value; }
-    public int CurrentState { get => currentState; set => currentState = value; }
+    public int CurrentStage { get => currentStage; set => currentStage = value; }
 
-    private void Start()
-    {
-
-    }
+    public void SetControl() => isControl = true;
     public void Init(List<MaterialColor> listColor, Transform starPoint, MaterialColor materialColor, List<Stage> stages)
     {
         transform.SetParent(starPoint);
@@ -50,7 +47,7 @@ public abstract class Character : MonoBehaviour
         }
         currentAnim = currentAnim == Constansts.DeathAnim ? null : currentAnim;
     }
-    public void AddBrick(Brick brick)
+    public void AddBrick()
     {
         Brick prefab = Instantiate(brickPrefab, Vector3.zero, Quaternion.identity);
         prefab.transform.SetParent(brickHolder);
@@ -60,20 +57,27 @@ public abstract class Character : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
+        if (!isControl) return;
         // Adđ Brick
         if (other.CompareTag(Constansts.BrickTag))
         {
             Brick brick = other.GetComponent<Brick>();
             if (brick.MaterialColor.BrickColor == materialColor.BrickColor)
             {
-                AddBrick(brick);
+                AddBrick();
                 brick.OnDespawn();
             }
+            else if (brick.MaterialColor.BrickColor == BrickColor.Grey)
+            {
+                AddBrick();
+                Destroy(brick.gameObject);
+            }
         }
-        // Build Bridge
+        // Collect Bridge
         else if (other.CompareTag(Constansts.BrickBridgeTag))
         {
             BrickBridge brickBridge = other.GetComponent<BrickBridge>();
+            if (brickBridge.Bridge.IsLock) return;
             if (brickBridge.MaterialColor.BrickColor != materialColor.BrickColor && listBrick.Count > 0)
             {
                 brickBridge.SetMaterial(materialColor);
@@ -93,12 +97,14 @@ public abstract class Character : MonoBehaviour
         if (brickBridge.CheckPassBridge(color))
         {
             brickBridge.NextStage(color);
-            currentState++;
-            if (currentState < stages.Count - 1)
+            stages[currentStage].ShowBrick(color, false);
+            stages[currentStage].ListBridge.Remove(stages[currentStage].ListBridge.First(n => n.IsLock));
+            currentStage++;
+            if (currentStage <= stages.Count - 1)
             {
-                stages[currentState].ShowBrick(color);
+                stages[currentStage].ShowBrick(color);
             }
-            CheckWin(currentState);
+            CheckWin(currentStage);
         }
     }
     public void CheckWin(int state)
@@ -106,32 +112,46 @@ public abstract class Character : MonoBehaviour
         if (state == stages.Count)
         {
             isControl = false;
-
+            //IsBotWin();
             ChangeAnim(Constansts.IdleAnim);
             StartCoroutine(removeAllBrick());
+            transform.DORotate(new Vector3(0f, 180f, 0f), 0.1f);
             transform.DOLocalMoveZ(transform.localPosition.z + 5f, 1.5f).OnComplete(() =>
             {
                 ChangeAnim(Constansts.WinAnim);
             });
         }
     }
-    public void CheckFall(Collider target)
+    /*public void IsBotWin()
+    {
+        Character e = gameObject.GetComponent<Character>();
+        if (e is Enemy)
+        {
+            Enemy enemy = e as Enemy;
+            enemy.CheckStage();
+        }
+    }*/
+    public virtual void CheckFall(Collider target)
     {
         if (isColide) return;
-        isColide = true;
         Character enemy = target.GetComponent<Character>();
-        if (enemy is Enemy || enemy is Player)
+        if (enemy.listBrick.Count > listBrick.Count && !isColide)
         {
-            if (enemy.listBrick.Count < listBrick.Count)
-            {
-                StartCoroutine(enemy.removeAllBrick());
-                return;
-            }
-            else if (enemy.listBrick.Count > listBrick.Count)
-            {
-                ChangeAnim(Constansts.DeathAnim);
-                StartCoroutine(removeAllBrick());
-            }
+            isColide = true;
+            isControl = false;
+            StartCoroutine(removeAllBrick());
+            ChangeAnim(Constansts.DeathAnim);
+            Invoke(nameof(SetControl), 8f);
+            CheckBotFall(enemy);
+        }
+    }
+    public virtual void CheckBotFall(Character enemy)
+    {
+        if (enemy is Enemy)
+        {
+            Debug.Log("Check Bot");
+            Enemy bot = enemy as Enemy;
+            bot.Build();
         }
     }
     private IEnumerator removeAllBrick()
@@ -155,7 +175,7 @@ public abstract class Character : MonoBehaviour
             }
             listBrick.Clear();
         }
-        yield return null;
+        yield return new WaitForSeconds(4f);
         isColide = false;
     }
 }

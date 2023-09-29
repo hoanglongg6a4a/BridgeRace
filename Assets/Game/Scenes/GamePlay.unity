@@ -106,7 +106,7 @@ NavMeshSettings:
   m_BuildSettings:
     serializedVersion: 2
     agentTypeID: 0
-    agentRadius: 0.2
+    agentRadius: 0.5
     agentHeight: 2
     agentSlope: 45
     agentClimb: 0.4
@@ -114,7 +114,7 @@ NavMeshSettings:
     maxJumpAcrossDistance: 0
     minRegionArea: 2
     manualCellSize: 0
-    cellSize: 0.06666667
+    cellSize: 0.16666667
     manualTileSize: 0
     tileSize: 256
     accuratePlacement: 0
@@ -1432,17 +1432,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5776976397349470978, guid: e08413c4e31eeae438d0c615fba61d36, type: 3}
   m_PrefabInstance: {fileID: 956497159}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &1040714374 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7600544611887346300, guid: e08413c4e31eeae438d0c615fba61d36, type: 3}
-  m_PrefabInstance: {fileID: 956497159}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8b5f9a7525825d4b9dab5919363e39f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1090878325
 GameObject:
   m_ObjectHideFlags: 0
@@ -1857,8 +1846,6 @@ MonoBehaviour:
   listBrick: []
   listBridge:
   - {fileID: 95154901}
-  - {fileID: 1040714374}
-  - {fileID: 1615531641}
   size: {x: 6, y: 6}
   cellSize: 1.5
   brickHolder: {fileID: 528310004}
@@ -2038,17 +2025,6 @@ Transform:
   m_Father: {fileID: 785951819}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1615531641 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7600544611887346300, guid: e08413c4e31eeae438d0c615fba61d36, type: 3}
-  m_PrefabInstance: {fileID: 81892153}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f8b5f9a7525825d4b9dab5919363e39f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &1615531642 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5776976397349470978, guid: e08413c4e31eeae438d0c615fba61d36, type: 3}

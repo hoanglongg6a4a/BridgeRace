@@ -15,7 +15,7 @@ public class Brick : MonoBehaviour
     public void OnDespawn()
     {
         SetStatus(false);
-        Invoke(nameof(OnActive), 5f);
+        Invoke(nameof(OnActive), 7f);
     }
     public void OnActive()
     {

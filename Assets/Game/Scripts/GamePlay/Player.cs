@@ -7,7 +7,6 @@ public class Player : Character
     [SerializeField] private LayerMask brickBrigeLayer;
     [SerializeField] private LayerMask wallLayer;
     private Vector3 moveVector;
-    private RaycastHit hit;
     private RaycastHit hitWall;
     void Start()
     {

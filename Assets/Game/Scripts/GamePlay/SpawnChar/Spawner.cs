@@ -34,6 +34,7 @@ public class Spawner : MonoBehaviour
         {
             Enemy prefab = Instantiate(enemyPrefab, listStartPoint[i].position, Quaternion.identity);
             prefab.Init(listMaterial, listStartPoint[i].transform, newListColor[i], stages);
+            prefab.gameObject.name = prefab.gameObject.name + i;
         }
     }
     public void SpawnPlayer()
