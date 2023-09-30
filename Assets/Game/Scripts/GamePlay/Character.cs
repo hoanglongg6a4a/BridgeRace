@@ -122,15 +122,6 @@ public abstract class Character : MonoBehaviour
             });
         }
     }
-    /*public void IsBotWin()
-    {
-        Character e = gameObject.GetComponent<Character>();
-        if (e is Enemy)
-        {
-            Enemy enemy = e as Enemy;
-            enemy.CheckStage();
-        }
-    }*/
     public virtual void CheckFall(Collider target)
     {
         if (isColide) return;
@@ -141,18 +132,12 @@ public abstract class Character : MonoBehaviour
             isControl = false;
             StartCoroutine(removeAllBrick());
             ChangeAnim(Constansts.DeathAnim);
-            Invoke(nameof(SetControl), 8f);
-            CheckBotFall(enemy);
+            Fined(enemy);
         }
     }
-    public virtual void CheckBotFall(Character enemy)
+    public virtual void Fined(Character enemy)
     {
-        if (enemy is Enemy)
-        {
-            Debug.Log("Check Bot");
-            Enemy bot = enemy as Enemy;
-            bot.Build();
-        }
+        Invoke(nameof(SetControl), 4f);
     }
     private IEnumerator removeAllBrick()
     {

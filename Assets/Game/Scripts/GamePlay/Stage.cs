@@ -104,9 +104,9 @@ public class Stage : MonoBehaviour
     }
     public Bridge GetRandomBridge()
     {
-        List<Bridge> newList = listBridge.Where(n => !n.IsLock).ToList();
-        int index = Random.Range(0, newList.Count - 1);
-        return newList[index];
+        /*List<Bridge> newList = listBridge.Where(n => !n.IsLock).ToList();*/
+        int index = Random.Range(0, listBridge.Count - 1);
+        return listBridge[index];
     }
     // Update is called once per frame
     void Update()
