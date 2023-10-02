@@ -47,13 +47,18 @@ public abstract class Character : MonoBehaviour
         }
         currentAnim = currentAnim == Constansts.DeathAnim ? null : currentAnim;
     }
-    public void AddBrick()
+    public void AddBrick(Brick brick)
     {
-        Brick prefab = Instantiate(brickPrefab, Vector3.zero, Quaternion.identity);
-        prefab.transform.SetParent(brickHolder);
-        prefab.SetMaterial(materialColor);
-        prefab.transform.SetLocalPositionAndRotation(listBrick.Count == 0 ? Vector3.zero : new Vector3(0f, (listBrick[listBrick.Count - 1].transform.localPosition.y + 0.4f), 0f), Quaternion.identity);
-        listBrick.Add(prefab);
+        brick.SetMaterial(materialColor);
+        brick.transform.SetParent(brickHolder);
+        brick.transform.SetLocalPositionAndRotation(listBrick.Count == 0 ? Vector3.zero : new Vector3(0f, (listBrick[listBrick.Count - 1].transform.localPosition.y + 0.4f), 0f), Quaternion.identity);
+        listBrick.Add(brick);
+
+        /*        Brick prefab = Instantiate(brickPrefab, Vector3.zero, Quaternion.identity);
+                prefab.transform.SetParent(brickHolder);
+                prefab.SetMaterial(materialColor);
+                prefab.transform.SetLocalPositionAndRotation(listBrick.Count == 0 ? Vector3.zero : new Vector3(0f, (listBrick[listBrick.Count - 1].transform.localPosition.y + 0.4f), 0f), Quaternion.identity);
+                listBrick.Add(prefab);*/
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -64,13 +69,13 @@ public abstract class Character : MonoBehaviour
             Brick brick = other.GetComponent<Brick>();
             if (brick.MaterialColor.BrickColor == materialColor.BrickColor)
             {
-                AddBrick();
-                brick.OnDespawn();
+                AddBrick(brick);
+                //brick.OnDespawn();
             }
             else if (brick.MaterialColor.BrickColor == BrickColor.Grey)
             {
-                AddBrick();
-                Destroy(brick.gameObject);
+                AddBrick(brick);
+                //Destroy(brick.gameObject);
             }
         }
         // Collect Bridge

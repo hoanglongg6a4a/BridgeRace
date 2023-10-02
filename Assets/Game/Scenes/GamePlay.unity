@@ -1134,7 +1134,7 @@ MonoBehaviour:
   size: {x: 6, y: 6}
   cellSize: 1.5
   brickHolder: {fileID: 2095285839}
-  brickPrefab: {fileID: -4155028080227848394, guid: a938d9291032aca4480b7102d5b1a795, type: 3}
+  brickPrefab: {fileID: 7810324733657513727, guid: a938d9291032aca4480b7102d5b1a795, type: 3}
 --- !u!1 &819540715
 GameObject:
   m_ObjectHideFlags: 0
@@ -1849,7 +1849,7 @@ MonoBehaviour:
   size: {x: 6, y: 6}
   cellSize: 1.5
   brickHolder: {fileID: 528310004}
-  brickPrefab: {fileID: -4155028080227848394, guid: a938d9291032aca4480b7102d5b1a795, type: 3}
+  brickPrefab: {fileID: 7810324733657513727, guid: a938d9291032aca4480b7102d5b1a795, type: 3}
 --- !u!64 &1565317980
 MeshCollider:
   m_ObjectHideFlags: 0

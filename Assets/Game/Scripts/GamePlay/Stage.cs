@@ -2,6 +2,21 @@
 using System.Linq;
 using UnityEngine;
 
+[System.Serializable]
+public class BrickPos
+{
+    [SerializeField] private Vector3 pos;
+    [SerializeField] private Brick brick;
+
+    public BrickPos(Vector3 pos, Brick brick)
+    {
+        Pos = pos;
+        Brick = brick;
+    }
+
+    public Vector3 Pos { get => pos; set => pos = value; }
+    public Brick Brick { get => brick; set => brick = value; }
+}
 public class Stage : MonoBehaviour
 {
     [SerializeField] private int index;
@@ -11,7 +26,8 @@ public class Stage : MonoBehaviour
     [SerializeField] private Vector2Int size;
     [SerializeField] private float cellSize = 2f;
     [SerializeField] private Transform brickHolder;
-    [SerializeField] private Brick brickPrefab;
+    [SerializeField] private GameObject brickPrefab;
+    [SerializeField] private List<BrickPos> listBrickPos;
     private List<Brick> listBrickRandom = new();
     public List<Brick> ListBrick { get => listBrick; set => listBrick = value; }
     public List<Bridge> ListBridge { get => listBridge; set => listBridge = value; }
@@ -63,9 +79,11 @@ public class Stage : MonoBehaviour
                 }
                 else
                 {
-                    brick.CancelInvoke();
+                    if (brick != null)
+                        SimplePool.Despawn(brick.gameObject);
+                    //brick.CancelInvoke();
 
-                    brick.gameObject.SetActive(false);
+                    //brick.gameObject.SetActive(false);
                 }
             }
         }
@@ -79,11 +97,14 @@ public class Stage : MonoBehaviour
                 float PosX = (-size.x / 2 + i) * cellSize + 0.5f;
                 float PosZ = (size.y / 2 - j) * cellSize;
                 Vector3 pos = new(PosX, 0.1f, PosZ);
-                Brick prefab = Instantiate(brickPrefab, Vector3.zero, Quaternion.identity);
+                //Brick prefab = Instantiate(brickPrefab, Vector3.zero, Quaternion.identity);
+                Brick prefab = SimplePool.Spawn(brickPrefab, Vector3.zero, Quaternion.identity).GetComponent<Brick>();
                 listBrick.Add(prefab);
                 listBrickRandom.Add(prefab);
                 prefab.transform.SetParent(brickHolder);
                 prefab.transform.localPosition = pos;
+                BrickPos newBrickPos = new(prefab.transform.localPosition, prefab);
+                listBrickPos.Add(newBrickPos);
             }
         }
         RandomColorBrick();
