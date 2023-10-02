@@ -15,14 +15,4 @@ public class BrickBridge : Brick
         this.NextStage = NextStage;
         this.bridge = bridge;
     }
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

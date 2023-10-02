@@ -4,7 +4,6 @@ public class Player : Character
 {
     [SerializeField] private float moveSpeed;
     [SerializeField] private FloatingJoystick joystick;
-    [SerializeField] private LayerMask brickBrigeLayer;
     [SerializeField] private LayerMask wallLayer;
     private Vector3 moveVector;
     private RaycastHit hitWall;
@@ -14,8 +13,11 @@ public class Player : Character
     }
     private void Update()
     {
-        if (!isControl) return;
-        Control();
+        if (isControl)
+        {
+            BuildBridge();
+            Control();
+        }
     }
     public override void Control()
     {

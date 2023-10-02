@@ -23,23 +23,10 @@ public class Bridge : MonoBehaviour
     }
     public void NextStage(MaterialColor color)
     {
-        gateOut.SetActive(false);
-        gateIn.CloseGateIn(color.Material);
         isLock = true;
-    }
-    public bool CheckBrickSameColor(MaterialColor color)
-    {
-        List<BrickBridge> count = brickBridges.Where(n => n.MaterialColor.BrickColor != color.BrickColor && n.MaterialColor.BrickColor != BrickColor.Grey).ToList();
-        if (count.Count > 2)
-        {
-            return false;
-        }
-        return true;
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
+        //gateOut.SetActive(false);
+        gateOut.SetActive(false);
+        //gateIn.CloseGateIn(color.Material);
 
     }
 }

@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 6758835214196169519}
   - component: {fileID: 6758835214196169516}
   - component: {fileID: 7404924336368724786}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: BrickBridge
   m_TagString: BrickBridge
   m_Icon: {fileID: 0}
@@ -96,7 +96,7 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 1, z: 1}
+  m_Size: {x: 1, y: 0.9, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &7404924336368724786
 MonoBehaviour:

@@ -12,17 +12,4 @@ public class Brick : MonoBehaviour
         MeshRenderer.material = materialColor.Material;
         this.materialColor = materialColor;
     }
-    public void OnDespawn()
-    {
-        SetStatus(false);
-        Invoke(nameof(OnActive), 7f);
-    }
-    public void OnActive()
-    {
-        SetStatus(true);
-    }
-    public void SetStatus(bool status)
-    {
-        gameObject.SetActive(status);
-    }
 }

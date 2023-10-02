@@ -9,9 +9,10 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected List<Brick> listBrick;
     [SerializeField] protected List<Stage> stages;
     [SerializeField] protected List<MaterialColor> listColor;
-    [SerializeField] protected Animator animator;
-    [SerializeField] protected SkinnedMeshRenderer skinnedMeshRenderer;
     [SerializeField] protected MaterialColor materialColor;
+    [SerializeField] protected LayerMask brickBridgeLayer;
+    [SerializeField] protected SkinnedMeshRenderer skinnedMeshRenderer;
+    [SerializeField] protected Animator animator;
     [SerializeField] protected Rigidbody rb;
     [SerializeField] protected Transform brickHolder;
     [SerializeField] protected Brick brickPrefab;
@@ -19,6 +20,8 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected bool isControl = true;
     protected bool isColide = false;
     protected string currentAnim;
+    protected RaycastHit hit;
+
     public List<Brick> ListBrick { get => listBrick; set => listBrick = value; }
     public int CurrentStage { get => currentStage; set => currentStage = value; }
 
@@ -47,18 +50,29 @@ public abstract class Character : MonoBehaviour
         }
         currentAnim = currentAnim == Constansts.DeathAnim ? null : currentAnim;
     }
-    public void AddBrick(Brick brick)
+    public virtual void AddBrick(Brick brick)
     {
         brick.SetMaterial(materialColor);
         brick.transform.SetParent(brickHolder);
         brick.transform.SetLocalPositionAndRotation(listBrick.Count == 0 ? Vector3.zero : new Vector3(0f, (listBrick[listBrick.Count - 1].transform.localPosition.y + 0.4f), 0f), Quaternion.identity);
         listBrick.Add(brick);
-
-        /*        Brick prefab = Instantiate(brickPrefab, Vector3.zero, Quaternion.identity);
-                prefab.transform.SetParent(brickHolder);
-                prefab.SetMaterial(materialColor);
-                prefab.transform.SetLocalPositionAndRotation(listBrick.Count == 0 ? Vector3.zero : new Vector3(0f, (listBrick[listBrick.Count - 1].transform.localPosition.y + 0.4f), 0f), Quaternion.identity);
-                listBrick.Add(prefab);*/
+    }
+    protected void BuildBridge()
+    {
+        Debug.Log("có vào");
+        Ray ray = new(transform.position, Vector3.down);
+        if (Physics.Raycast(ray, out hit, 10f, brickBridgeLayer))
+        {
+            BrickBridge brickBridge = hit.collider.GetComponent<BrickBridge>();
+            if (brickBridge.Bridge.IsLock) return;
+            if (brickBridge.MaterialColor.BrickColor != materialColor.BrickColor && listBrick.Count > 0)
+            {
+                brickBridge.SetMaterial(materialColor);
+                GiveBackBrick(listBrick[listBrick.Count - 1], brickBridge.MaterialColor);
+                listBrick.Remove(listBrick[listBrick.Count - 1]);
+                CheckPassStage(materialColor, brickBridge);
+            }
+        }
     }
     private void OnTriggerEnter(Collider other)
     {
@@ -69,33 +83,22 @@ public abstract class Character : MonoBehaviour
             Brick brick = other.GetComponent<Brick>();
             if (brick.MaterialColor.BrickColor == materialColor.BrickColor)
             {
+                stages[currentStage].RemoveBrickInBrickPosList(brick);
                 AddBrick(brick);
-                //brick.OnDespawn();
             }
             else if (brick.MaterialColor.BrickColor == BrickColor.Grey)
             {
                 AddBrick(brick);
-                //Destroy(brick.gameObject);
             }
         }
-        // Collect Bridge
-        else if (other.CompareTag(Constansts.BrickBridgeTag))
-        {
-            BrickBridge brickBridge = other.GetComponent<BrickBridge>();
-            if (brickBridge.Bridge.IsLock) return;
-            if (brickBridge.MaterialColor.BrickColor != materialColor.BrickColor && listBrick.Count > 0)
-            {
-                brickBridge.SetMaterial(materialColor);
-                Destroy(listBrick[listBrick.Count - 1].gameObject);
-                listBrick.Remove(listBrick[listBrick.Count - 1]);
-                CheckPassStage(materialColor, brickBridge);
-            }
-        }
-        // Colide with enemy
         else if (other.CompareTag(Constansts.PlayerTag))
         {
             CheckFall(other);
         }
+    }
+    public void GiveBackBrick(Brick brick, MaterialColor materialColor)
+    {
+        stages[currentStage].ReturnBrickInStage(brick, materialColor);
     }
     public void CheckPassStage(MaterialColor color, BrickBridge brickBridge)
     {
@@ -112,12 +115,14 @@ public abstract class Character : MonoBehaviour
             CheckWin(currentStage);
         }
     }
+    public virtual void DoPassStage(MaterialColor color, BrickBridge brickBridge)
+    {
+    }
     public void CheckWin(int state)
     {
         if (state == stages.Count)
         {
             isControl = false;
-            //IsBotWin();
             ChangeAnim(Constansts.IdleAnim);
             StartCoroutine(removeAllBrick());
             transform.DORotate(new Vector3(0f, 180f, 0f), 0.1f);
@@ -160,6 +165,7 @@ public abstract class Character : MonoBehaviour
                     {
                         brick.transform.SetParent(null);
                         brick.SetMaterial(listColor.First(n => n.BrickColor == BrickColor.Grey));
+                        stages[currentStage].ListBrick.Add(brick);
                     });
                 });
             }
