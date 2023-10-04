@@ -7,15 +7,10 @@ public class BrickPos
 {
     [SerializeField] private Vector3 pos;
     [SerializeField] private Brick brick;
-    private bool isHave;
     public BrickPos(Vector3 pos, Brick brick)
     {
         Pos = pos;
         Brick = brick;
-    }
-    public bool CheckBrick()
-    {
-        return isHave = brick != null ? false : true;
     }
     public Vector3 Pos { get => pos; set => pos = value; }
     public Brick Brick { get => brick; set => brick = value; }
@@ -54,13 +49,20 @@ public class Stage : MonoBehaviour
             }
         }
     }
-    public void RemoveBrickInBrickPosList(Brick brick)
+    public void RemoveBrickInBrickPosList(Brick brick, bool isGrey = false)
     {
-        BrickPos bp = listBrickPos.FirstOrDefault(n => n.Brick == brick);
-        if (bp != null)
+        if (isGrey)
         {
-            bp.Brick = null;
             listBrick.Remove(brick);
+        }
+        else
+        {
+            BrickPos bp = listBrickPos.FirstOrDefault(n => n.Brick == brick);
+            if (bp != null)
+            {
+                bp.Brick = null;
+                listBrick.Remove(brick);
+            }
         }
     }
     public void ReturnBrickInStage(Brick brick, MaterialColor color)
@@ -80,7 +82,7 @@ public class Stage : MonoBehaviour
     {
         float closestDistance = float.MaxValue;
         Brick ClosetBrick = null;
-        List<Brick> listBrickNew = listBrick.Where(n => (n.MaterialColor.BrickColor == color.BrickColor || n.MaterialColor.BrickColor == BrickColor.Grey) && n.gameObject.activeSelf).ToList();
+        List<Brick> listBrickNew = listBrick.Where(n => (n.MaterialColor.BrickColor == color.BrickColor || n.MaterialColor.BrickColor == BrickColor.Grey)).ToList();
         foreach (Brick obj in listBrickNew)
         {
             float distance = Vector3.Distance(Pos, obj.transform.position);

@@ -45,10 +45,4 @@ public class Spawner : MonoBehaviour
         setPlayer(prefab.transform);
         prefab.SetJoyStick(joystick);
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-
-    }
 }

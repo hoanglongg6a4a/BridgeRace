@@ -7,10 +7,6 @@ public class Player : Character
     [SerializeField] private LayerMask wallLayer;
     private Vector3 moveVector;
     private RaycastHit hitWall;
-    void Start()
-    {
-
-    }
     private void Update()
     {
         if (isControl)

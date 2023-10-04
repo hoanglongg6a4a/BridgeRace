@@ -1,7 +1,5 @@
 ﻿using DG.Tweening;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public abstract class Character : MonoBehaviour
@@ -18,7 +16,6 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected Brick brickPrefab;
     [SerializeField] protected int currentStage = 0;
     [SerializeField] protected bool isControl = true;
-    protected bool isColide = false;
     protected string currentAnim;
     protected RaycastHit hit;
 
@@ -87,6 +84,7 @@ public abstract class Character : MonoBehaviour
             }
             else if (brick.MaterialColor.BrickColor == BrickColor.Grey)
             {
+                stages[currentStage].RemoveBrickInBrickPosList(brick, true);
                 AddBrick(brick);
             }
         }
@@ -127,7 +125,7 @@ public abstract class Character : MonoBehaviour
         {
             isControl = false;
             ChangeAnim(Constansts.IdleAnim);
-            StartCoroutine(removeAllBrick());
+            removeAllBrick();
             transform.DORotate(new Vector3(0f, 180f, 0f), 0.1f);
             transform.DOLocalMoveZ(transform.localPosition.z + 5f, 1.5f).OnComplete(() =>
             {
@@ -137,14 +135,12 @@ public abstract class Character : MonoBehaviour
     }
     public virtual void CheckFall(Collider target)
     {
-        //if (isColide) return;
         Character enemy = target.GetComponent<Character>();
-        if (enemy.listBrick.Count > listBrick.Count && !isColide)
+        if (enemy.listBrick.Count > listBrick.Count)
         {
-            //isColide = true;
             isControl = false;
-            StartCoroutine(removeAllBrick());
             ChangeAnim(Constansts.DeathAnim);
+            removeAllBrick();
             Fined();
         }
     }
@@ -152,7 +148,7 @@ public abstract class Character : MonoBehaviour
     {
         Invoke(nameof(SetControl), 4f);
     }
-    private IEnumerator removeAllBrick()
+    private void removeAllBrick()
     {
         if (listBrick.Count > 0)
         {
@@ -167,14 +163,12 @@ public abstract class Character : MonoBehaviour
                     brick.transform.DOMove(temp, 0.4f).SetEase(Ease.OutBounce).OnComplete(() =>
                     {
                         brick.transform.SetParent(null);
-                        brick.SetMaterial(listColor.First(n => n.BrickColor == BrickColor.Grey));
+                        brick.SetMaterial(listColor.Find(n => n.BrickColor == BrickColor.Grey));
                         stages[currentStage].ListBrick.Add(brick);
                     });
                 });
             }
             listBrick.Clear();
         }
-        yield return new WaitForSeconds(4f);
-        //isColide = false;
     }
 }

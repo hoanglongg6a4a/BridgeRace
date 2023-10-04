@@ -78,7 +78,6 @@ public class Enemy : Character
         {
             if (listBrick.Count > 0)
             {
-                brickClosest = null;
                 ChoseBridge();
                 if (bridgeChose == null) return;
                 Vector3 destination = bridgeChose.BrickBridges[bridgeChose.BrickBridges.Count - 1].transform.position;
@@ -101,12 +100,9 @@ public class Enemy : Character
     {
         bridgeChose = bridgeChose == null ? stages[currentStage].GetRandomBridge(materialColor.BrickColor) : bridgeChose;
         Debug.Log(bridgeChose.CountDiffColor(materialColor.BrickColor));
-        if (bridgeChose.CountDiffColor(materialColor.BrickColor) >= 1)
+        if (bridgeChose.CountDiffColor(materialColor.BrickColor) >= 3)
         {
-            if (bridgeChose.CountBrickSameColor(materialColor.BrickColor) < 2)
-            {
-                bridgeChose = null;
-            }
+            bridgeChose = null;
         }
     }
     public override void Fined()
