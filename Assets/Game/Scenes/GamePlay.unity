@@ -1125,16 +1125,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
-  listMaterial: []
+  size: {x: 6, y: 6}
+  cellSize: 1.5
+  brickHolder: {fileID: 2095285839}
+  brickPrefab: {fileID: 7810324733657513727, guid: a938d9291032aca4480b7102d5b1a795, type: 3}
   listBrick: []
   listBridge:
   - {fileID: 5776976396619593451}
   - {fileID: 1241006386}
   - {fileID: 1354794229}
-  size: {x: 6, y: 6}
-  cellSize: 1.5
-  brickHolder: {fileID: 2095285839}
-  brickPrefab: {fileID: 7810324733657513727, guid: a938d9291032aca4480b7102d5b1a795, type: 3}
+  listBrickPos: []
+  listMaterial: []
 --- !u!1 &819540715
 GameObject:
   m_ObjectHideFlags: 0
@@ -1842,14 +1843,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 0
-  listMaterial: []
-  listBrick: []
-  listBridge:
-  - {fileID: 95154901}
   size: {x: 6, y: 6}
   cellSize: 1.5
   brickHolder: {fileID: 528310004}
   brickPrefab: {fileID: 7810324733657513727, guid: a938d9291032aca4480b7102d5b1a795, type: 3}
+  listBrick: []
+  listBridge:
+  - {fileID: 95154901}
+  listBrickPos: []
+  listMaterial: []
 --- !u!64 &1565317980
 MeshCollider:
   m_ObjectHideFlags: 0

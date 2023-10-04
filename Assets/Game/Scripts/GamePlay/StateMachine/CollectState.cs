@@ -1,4 +1,4 @@
-public class CollectState : IState
+﻿public class CollectState : IState
 {
     public void OnEnter(Enemy enemy)
     {

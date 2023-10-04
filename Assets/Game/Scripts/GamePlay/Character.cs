@@ -16,6 +16,7 @@ public abstract class Character : MonoBehaviour
     [SerializeField] protected Brick brickPrefab;
     [SerializeField] protected int currentStage = 0;
     [SerializeField] protected bool isControl = true;
+    protected bool isGetBrick = false;
     protected string currentAnim;
     protected RaycastHit hit;
 
@@ -54,6 +55,7 @@ public abstract class Character : MonoBehaviour
         brick.SetMaterial(materialColor);
         listBrick.Add(brick);
         brick.transform.SetLocalPositionAndRotation(listBrick.Count == 1 ? Vector3.zero : new Vector3(0f, (listBrick[listBrick.Count - 2].transform.localPosition.y + 0.5f), 0f), Quaternion.identity);
+        isGetBrick = false;
     }
     protected void BuildBridge()
     {
@@ -77,18 +79,21 @@ public abstract class Character : MonoBehaviour
         // Adđ Brick
         if (other.CompareTag(Constansts.BrickTag))
         {
+            isGetBrick = true;
             Brick brick = other.GetComponent<Brick>();
             if (brick.MaterialColor.BrickColor == materialColor.BrickColor)
             {
+                Debug.Log("đang lụm ");
                 stages[currentStage].RemoveBrickInBrickPosList(brick);
                 AddBrick(brick);
             }
             else if (brick.MaterialColor.BrickColor == BrickColor.Grey)
             {
+                stages[currentStage].RemoveBrickInBrickPosList(brick, true);
                 AddBrick(brick);
             }
         }
-        else if (other.CompareTag(Constansts.PlayerTag))
+        else if (other.CompareTag(Constansts.PlayerTag) && !isGetBrick)
         {
             CheckFall(other);
         }
@@ -157,8 +162,8 @@ public abstract class Character : MonoBehaviour
                 Vector3 temp = brick.transform.position;
                 temp.x += Random.Range(0f, 2f);
                 temp.z += Random.Range(0f, 2f);
-                brick.transform.SetParent(null);
                 stages[currentStage].ListBrick.Add(brick);
+                brick.transform.SetParent(null);
                 brick.transform.DOMove(temp, 0.4f).OnComplete(() =>
                 {
                     temp.y = 0.5f;

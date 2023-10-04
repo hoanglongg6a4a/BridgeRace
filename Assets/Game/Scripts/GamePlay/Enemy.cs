@@ -51,8 +51,8 @@ public class Enemy : Character
     }
     public override void AddBrick(Brick brick)
     {
-        brickClosest = null;
         base.AddBrick(brick);
+        brickClosest = null;
     }
     public void Collect()
     {
@@ -64,8 +64,22 @@ public class Enemy : Character
         {
             ChangeAnim(Constansts.RunAnim);
             brickClosest = brickClosest == null ? stages[currentStage].GetBrickPostiniton(materialColor, transform.position) : brickClosest;
-            if (brickClosest == null) return;
-            navAgent.SetDestination(brickClosest.transform.position);
+            if (!(listBrick.Find(n => n == brickClosest)))
+            {
+                if (brickClosest == null) return;
+                //Debug.Log(brickClosest.name + " " + Vector3.Distance(transform.position, brickClosest.transform.position));
+                navAgent.SetDestination(brickClosest.transform.position);
+                if (Vector3.Distance(transform.position, brickClosest.transform.position) < 0.2f && !(listBrick.Find(n => n == brickClosest)))
+                {
+                    //Debug.Log("Có vào trường hợp đặc biệt");
+                    base.AddBrick(brickClosest);
+                    stages[currentStage].RemoveBrickInBrickPosList(brickClosest, true);
+                }
+            }
+            else
+            {
+                brickClosest = null;
+            }
         }
     }
     public void Build()
@@ -99,7 +113,6 @@ public class Enemy : Character
     public void ChoseBridge()
     {
         bridgeChose = bridgeChose == null ? stages[currentStage].GetRandomBridge(materialColor.BrickColor) : bridgeChose;
-        Debug.Log(bridgeChose.CountDiffColor(materialColor.BrickColor));
         if (bridgeChose.CountDiffColor(materialColor.BrickColor) >= 3)
         {
             bridgeChose = null;
@@ -108,15 +121,15 @@ public class Enemy : Character
     public override void Fined()
     {
         ResetAgent();
-        ChangeState(new CollectState());
         base.Fined();
+        ChangeState(new CollectState());
     }
     private void ResetAgent()
     {
         brickClosest = null;
         bridgeChose = null;
-        navAgent.ResetPath();
         ChangeState(null);
+        navAgent.ResetPath();
     }
     public override void DoPassStage(MaterialColor color, BrickBridge brickBridge)
     {
