@@ -71,7 +71,6 @@ public class Enemy : Character
                 navAgent.SetDestination(brickClosest.transform.position);
                 if (Vector3.Distance(transform.position, brickClosest.transform.position) < 0.2f && !(listBrick.Find(n => n == brickClosest)))
                 {
-                    //Debug.Log("Có vào trường hợp đặc biệt");
                     base.AddBrick(brickClosest);
                     stages[currentStage].RemoveBrickInBrickPosList(brickClosest, true);
                 }

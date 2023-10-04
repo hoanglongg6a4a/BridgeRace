@@ -83,7 +83,6 @@ public abstract class Character : MonoBehaviour
             Brick brick = other.GetComponent<Brick>();
             if (brick.MaterialColor.BrickColor == materialColor.BrickColor)
             {
-                Debug.Log("đang lụm ");
                 stages[currentStage].RemoveBrickInBrickPosList(brick);
                 AddBrick(brick);
             }
