@@ -49,20 +49,13 @@ public class Stage : MonoBehaviour
             }
         }
     }
-    public void RemoveBrickInBrickPosList(Brick brick, bool isGrey = false)
+    public void RemoveBrickInBrickPosList(Brick brick)
     {
-        if (isGrey)
+        BrickPos bp = listBrickPos.FirstOrDefault(n => n.Brick == brick);
+        if (bp != null)
         {
+            bp.Brick = null;
             listBrick.Remove(brick);
-        }
-        else
-        {
-            BrickPos bp = listBrickPos.FirstOrDefault(n => n.Brick == brick);
-            if (bp != null)
-            {
-                bp.Brick = null;
-                listBrick.Remove(brick);
-            }
         }
     }
     public void ReturnBrickInStage(Brick brick, MaterialColor color)

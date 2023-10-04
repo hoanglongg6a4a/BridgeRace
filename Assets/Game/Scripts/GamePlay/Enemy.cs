@@ -108,8 +108,8 @@ public class Enemy : Character
     public override void Fined()
     {
         ResetAgent();
-        base.Fined();
         ChangeState(new CollectState());
+        base.Fined();
     }
     private void ResetAgent()
     {

@@ -49,10 +49,11 @@ public abstract class Character : MonoBehaviour
     }
     public virtual void AddBrick(Brick brick)
     {
-        brick.SetMaterial(materialColor);
+        if (brick == null) return;
         brick.transform.SetParent(brickHolder);
-        brick.transform.SetLocalPositionAndRotation(listBrick.Count == 0 ? Vector3.zero : new Vector3(0f, (listBrick[listBrick.Count - 1].transform.localPosition.y + 0.4f), 0f), Quaternion.identity);
+        brick.SetMaterial(materialColor);
         listBrick.Add(brick);
+        brick.transform.SetLocalPositionAndRotation(listBrick.Count == 1 ? Vector3.zero : new Vector3(0f, (listBrick[listBrick.Count - 2].transform.localPosition.y + 0.5f), 0f), Quaternion.identity);
     }
     protected void BuildBridge()
     {
@@ -84,7 +85,6 @@ public abstract class Character : MonoBehaviour
             }
             else if (brick.MaterialColor.BrickColor == BrickColor.Grey)
             {
-                stages[currentStage].RemoveBrickInBrickPosList(brick, true);
                 AddBrick(brick);
             }
         }
@@ -157,14 +157,14 @@ public abstract class Character : MonoBehaviour
                 Vector3 temp = brick.transform.position;
                 temp.x += Random.Range(0f, 2f);
                 temp.z += Random.Range(0f, 2f);
-                brick.transform.DOMove(temp, 0.3f).OnComplete(() =>
+                brick.transform.SetParent(null);
+                stages[currentStage].ListBrick.Add(brick);
+                brick.transform.DOMove(temp, 0.4f).OnComplete(() =>
                 {
                     temp.y = 0.5f;
                     brick.transform.DOMove(temp, 0.4f).SetEase(Ease.OutBounce).OnComplete(() =>
                     {
-                        brick.transform.SetParent(null);
                         brick.SetMaterial(listColor.Find(n => n.BrickColor == BrickColor.Grey));
-                        stages[currentStage].ListBrick.Add(brick);
                     });
                 });
             }
