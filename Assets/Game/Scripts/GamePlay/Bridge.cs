@@ -13,7 +13,6 @@ public class Bridge : MonoBehaviour
     [SerializeField] private Material material;
     public bool IsLock { get => isLock; }
     public List<BrickBridge> BrickBridges { get => brickBridges; }
-
     public bool CheckCompleteBuild(MaterialColor brickColor) => brickBridges.All(n => n.MaterialColor.BrickColor == brickColor.BrickColor);
     void Start()
     {
