@@ -1,10 +1,9 @@
-﻿using System.Collections;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemy : Character
 {
-    [SerializeField] private Bridge BridgeChose;
+    [SerializeField] private Bridge bridgeChose;
     [SerializeField] private Brick brickClosest;
     [SerializeField] private IState currentState;
     [SerializeField] private NavMeshAgent navAgent;
@@ -52,8 +51,8 @@ public class Enemy : Character
     }
     public override void AddBrick(Brick brick)
     {
-        base.AddBrick(brick);
         brickClosest = null;
+        base.AddBrick(brick);
     }
     public void Collect()
     {
@@ -65,11 +64,8 @@ public class Enemy : Character
         {
             ChangeAnim(Constansts.RunAnim);
             brickClosest = brickClosest == null ? stages[currentStage].GetBrickPostiniton(materialColor, transform.position) : brickClosest;
+            if (brickClosest == null) return;
             navAgent.SetDestination(brickClosest.transform.position);
-            /*            if (navAgent.remainingDistance <= navAgent.stoppingDistance)
-                        {
-                            brickClosest = stages[currentStage].GetBrickPostiniton(materialColor, transform.position);
-                        }*/
         }
     }
     public void Build()
@@ -82,12 +78,14 @@ public class Enemy : Character
         {
             if (listBrick.Count > 0)
             {
+                brickClosest = null;
                 ChoseBridge();
-                Vector3 destination = BridgeChose.BrickBridges[BridgeChose.BrickBridges.Count - 1].transform.position;
+                if (bridgeChose == null) return;
+                Vector3 destination = bridgeChose.BrickBridges[bridgeChose.BrickBridges.Count - 1].transform.position;
                 navAgent.SetDestination(destination);
                 if (navAgent.remainingDistance <= navAgent.stoppingDistance)
                 {
-                    if (!BridgeChose.IsLock)
+                    if (!bridgeChose.IsLock)
                     {
                         ChangeState(new CollectState());
                     }
@@ -101,35 +99,33 @@ public class Enemy : Character
     }
     public void ChoseBridge()
     {
-        BridgeChose = BridgeChose == null ? stages[currentStage].GetRandomBridge() : BridgeChose;
-        if (BridgeChose.IsLock)
+        bridgeChose = bridgeChose == null ? stages[currentStage].GetRandomBridge(materialColor.BrickColor) : bridgeChose;
+        Debug.Log(bridgeChose.CountDiffColor(materialColor.BrickColor));
+        if (bridgeChose.CountDiffColor(materialColor.BrickColor) >= 1)
         {
-            BridgeChose = stages[currentStage].GetRandomBridge();
+            if (bridgeChose.CountBrickSameColor(materialColor.BrickColor) < 2)
+            {
+                bridgeChose = null;
+            }
         }
     }
-    public override void Fined(Character enemy)
+    public override void Fined()
     {
-        ChangeState(null);
-        navAgent.ResetPath();
-        brickClosest = null;
-        StartCoroutine(Reset());
-        base.Fined(enemy);
-
-    }
-    private IEnumerator Reset()
-    {
-        yield return new WaitForSeconds(4f);
+        ResetAgent();
+        base.Fined();
         ChangeState(new CollectState());
-
     }
     private void ResetAgent()
     {
-        BridgeChose = null;
+        brickClosest = null;
+        bridgeChose = null;
         navAgent.ResetPath();
         ChangeState(null);
     }
     public override void DoPassStage(MaterialColor color, BrickBridge brickBridge)
     {
+        ResetAgent();
         base.DoPassStage(color, brickBridge);
+        ChangeState(new CollectState());
     }
 }

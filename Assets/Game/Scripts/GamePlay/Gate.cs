@@ -3,7 +3,7 @@ using UnityEngine;
 public class Gate : MonoBehaviour
 {
     [SerializeField] private MeshRenderer meshRenderer;
-    public void CloseGateIn(Material color)
+    public void CloseGate(Material color)
     {
         SetActive(true);
         meshRenderer.material = color;

@@ -59,7 +59,6 @@ public abstract class Character : MonoBehaviour
     }
     protected void BuildBridge()
     {
-        Debug.Log("có vào");
         Ray ray = new(transform.position, Vector3.down);
         if (Physics.Raycast(ray, out hit, 10f, brickBridgeLayer))
         {
@@ -68,10 +67,10 @@ public abstract class Character : MonoBehaviour
             if (brickBridge.MaterialColor.BrickColor != materialColor.BrickColor && listBrick.Count > 0)
             {
                 brickBridge.SetMaterial(materialColor);
-                GiveBackBrick(listBrick[listBrick.Count - 1], brickBridge.MaterialColor);
+                GiveBackBrick(listBrick[listBrick.Count - 1], materialColor);
                 listBrick.Remove(listBrick[listBrick.Count - 1]);
-                CheckPassStage(materialColor, brickBridge);
             }
+            CheckPassStage(materialColor, brickBridge);
         }
     }
     private void OnTriggerEnter(Collider other)
@@ -104,19 +103,23 @@ public abstract class Character : MonoBehaviour
     {
         if (brickBridge.CheckPassBridge(color))
         {
-            brickBridge.NextStage(color);
             stages[currentStage].ShowBrick(color, false);
-            stages[currentStage].ListBridge.Remove(stages[currentStage].ListBridge.First(n => n.IsLock));
+            stages[currentStage].ListBridge.Remove(brickBridge.Bridge);
             currentStage++;
+            brickBridge.NextStage(color);
+            DoPassStage(color, brickBridge);
+        }
+    }
+    public virtual void DoPassStage(MaterialColor color, BrickBridge brickBridge)
+    {
+        transform.DOLocalMoveZ(transform.localPosition.z + 3f, 0.5f).OnComplete(() =>
+        {
             if (currentStage <= stages.Count - 1)
             {
                 stages[currentStage].ShowBrick(color);
             }
             CheckWin(currentStage);
-        }
-    }
-    public virtual void DoPassStage(MaterialColor color, BrickBridge brickBridge)
-    {
+        });
     }
     public void CheckWin(int state)
     {
@@ -134,18 +137,18 @@ public abstract class Character : MonoBehaviour
     }
     public virtual void CheckFall(Collider target)
     {
-        if (isColide) return;
+        //if (isColide) return;
         Character enemy = target.GetComponent<Character>();
         if (enemy.listBrick.Count > listBrick.Count && !isColide)
         {
-            isColide = true;
+            //isColide = true;
             isControl = false;
             StartCoroutine(removeAllBrick());
             ChangeAnim(Constansts.DeathAnim);
-            Fined(enemy);
+            Fined();
         }
     }
-    public virtual void Fined(Character enemy)
+    public virtual void Fined()
     {
         Invoke(nameof(SetControl), 4f);
     }
@@ -172,6 +175,6 @@ public abstract class Character : MonoBehaviour
             listBrick.Clear();
         }
         yield return new WaitForSeconds(4f);
-        isColide = false;
+        //isColide = false;
     }
 }

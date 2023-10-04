@@ -56,25 +56,31 @@ public class Stage : MonoBehaviour
     }
     public void RemoveBrickInBrickPosList(Brick brick)
     {
-        BrickPos bp = listBrickPos.First(n => n.Pos == brick.transform.localPosition);
-        bp.Brick = null;
-        listBrick.Remove(brick);
+        BrickPos bp = listBrickPos.FirstOrDefault(n => n.Brick == brick);
+        if (bp != null)
+        {
+            bp.Brick = null;
+            listBrick.Remove(brick);
+        }
     }
     public void ReturnBrickInStage(Brick brick, MaterialColor color)
     {
-        BrickPos bp = listBrickPos.First(n => n.Brick == null);
-        if (bp == null || color.BrickColor == BrickColor.None) return;
-        bp.Brick = brick;
-        listBrick.Add(brick);
-        brick.transform.SetParent(brickHolder);
-        brick.transform.SetLocalPositionAndRotation(bp.Pos, Quaternion.identity);
-        brick.SetMaterial(color);
+        BrickPos bp = listBrickPos.FirstOrDefault(n => n.Brick == null);
+        if (bp != null)
+        {
+            if (color.BrickColor == BrickColor.None) return;
+            bp.Brick = brick;
+            listBrick.Add(brick);
+            brick.transform.SetParent(brickHolder);
+            brick.transform.SetLocalPositionAndRotation(bp.Pos, Quaternion.identity);
+            brick.SetMaterial(color);
+        }
     }
     public Brick GetBrickPostiniton(MaterialColor color, Vector3 Pos)
     {
         float closestDistance = float.MaxValue;
         Brick ClosetBrick = null;
-        List<Brick> listBrickNew = listBrick.Where(n => n.MaterialColor.BrickColor == color.BrickColor && n.gameObject.activeSelf || n.MaterialColor.BrickColor == BrickColor.Grey).ToList();
+        List<Brick> listBrickNew = listBrick.Where(n => (n.MaterialColor.BrickColor == color.BrickColor || n.MaterialColor.BrickColor == BrickColor.Grey) && n.gameObject.activeSelf).ToList();
         foreach (Brick obj in listBrickNew)
         {
             float distance = Vector3.Distance(Pos, obj.transform.position);
@@ -138,14 +144,22 @@ public class Stage : MonoBehaviour
             }
         }
     }
-    public Bridge GetRandomBridge()
+    public Bridge GetRandomBridge(BrickColor color)
     {
-        int index = Random.Range(0, listBridge.Count - 1);
-        return listBridge[index];
-    }
-    // Update is called once per frame
-    void Update()
-    {
-
+        Bridge bridgeChose = listBridge.First(n => !n.IsLock);
+        foreach (Bridge bridge in listBridge)
+        {
+            if (!bridge.IsLock)
+            {
+                if (bridge.CountBrickSameColor(color) >= bridgeChose.CountBrickSameColor(color))
+                {
+                    if (bridge.CountDiffColor(color) <= 1)
+                    {
+                        bridgeChose = bridge;
+                    }
+                }
+            }
+        }
+        return bridgeChose;
     }
 }

@@ -10,6 +10,7 @@ public class Bridge : MonoBehaviour
     [SerializeField] private MaterialColor color;
     [SerializeField] private Stage stage;
     [SerializeField] private bool isLock = false;
+    [SerializeField] private Material material;
     public bool IsLock { get => isLock; }
     public List<BrickBridge> BrickBridges { get => brickBridges; }
 
@@ -24,9 +25,22 @@ public class Bridge : MonoBehaviour
     public void NextStage(MaterialColor color)
     {
         isLock = true;
-        //gateOut.SetActive(false);
+        this.material = color.Material;
         gateOut.SetActive(false);
-        //gateIn.CloseGateIn(color.Material);
-
+        Invoke(nameof(CloseGate), 0.6f);
+    }
+    public void CloseGate()
+    {
+        gateOut.CloseGate(material);
+    }
+    public int CountBrickSameColor(BrickColor color)
+    {
+        List<BrickBridge> listBrickSameColor = brickBridges.Where(n => n.MaterialColor.BrickColor.Equals(color)).ToList();
+        return listBrickSameColor.Count;
+    }
+    public int CountDiffColor(BrickColor color)
+    {
+        List<BrickBridge> listBrickDiffColor = brickBridges.Where(n => !(n.MaterialColor.BrickColor.Equals(color)) && !(n.MaterialColor.BrickColor.Equals(BrickColor.None))).ToList();
+        return listBrickDiffColor.Count;
     }
 }
