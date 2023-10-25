@@ -6,7 +6,7 @@
 
     public void OnExcute(Enemy enemy)
     {
-        if (enemy.ListBrick.Count > 5)
+        if (enemy.Bricks.Count > 5)
         {
             enemy.ChangeState(new BuildState());
             return;

@@ -5,6 +5,7 @@ public class Gate : MonoBehaviour
     [SerializeField] private MeshRenderer meshRenderer;
     public void CloseGate(Material color)
     {
+        Debug.Log("close Gate");
         SetActive(true);
         meshRenderer.material = color;
     }

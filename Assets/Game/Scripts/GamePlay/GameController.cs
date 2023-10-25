@@ -11,7 +11,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private CameraFollow cameraFollow;
     [SerializeField] private Spawner spawner;
     //[SerializeField] private  joystick;
-    void Awake()
+    private void Awake()
     {
         GameObject receive = GameObject.FindGameObjectWithTag("Param");
         if (receive != null)

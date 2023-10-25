@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 using UnityEngine.AI;
 
 public class Enemy : Character
@@ -64,12 +65,12 @@ public class Enemy : Character
         {
             ChangeAnim(Constansts.RunAnim);
             brickClosest = brickClosest == null ? stages[currentStage].GetBrickPostiniton(materialColor, transform.position) : brickClosest;
-            if (!(listBrick.Find(n => n == brickClosest)))
+            if (!(bricks.ToList().Find(n => n == brickClosest)))
             {
                 if (brickClosest == null) return;
                 //Debug.Log(brickClosest.name + " " + Vector3.Distance(transform.position, brickClosest.transform.position));
                 navAgent.SetDestination(brickClosest.transform.position);
-                if (Vector3.Distance(transform.position, brickClosest.transform.position) < 0.2f && !(listBrick.Find(n => n == brickClosest)))
+                if (Vector3.Distance(transform.position, brickClosest.transform.position) < 0.2f && !(bricks.ToList().Find(n => n == brickClosest)))
                 {
                     base.AddBrick(brickClosest);
                     stages[currentStage].RemoveBrickInBrickPosList(brickClosest, true);
@@ -89,7 +90,7 @@ public class Enemy : Character
         }
         else
         {
-            if (listBrick.Count > 0)
+            if (bricks.Count > 0)
             {
                 ChoseBridge();
                 if (bridgeChose == null) return;
@@ -130,10 +131,10 @@ public class Enemy : Character
         ChangeState(null);
         navAgent.ResetPath();
     }
-    public override void DoPassStage(MaterialColor color, BrickBridge brickBridge)
+    public override void DoPassStage(MaterialColor color)
     {
         ResetAgent();
-        base.DoPassStage(color, brickBridge);
+        base.DoPassStage(color);
         ChangeState(new CollectState());
     }
 }

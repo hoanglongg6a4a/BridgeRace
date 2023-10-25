@@ -15,17 +15,14 @@ public class Spawner : MonoBehaviour
     private Action<Transform> setPlayer;
     private BrickColor color;
     // Start is called before the first frame update
-    void Start()
-    {
-        SpawnPlayer();
-        SpawnEnenmy();
-    }
     public void Init(List<MaterialColor> listMaterial, BrickColor color, Action<Transform> setPlayer, List<Stage> stages)
     {
         this.listMaterial = listMaterial;
         this.color = color;
         this.setPlayer = setPlayer;
         this.stages = stages;
+        SpawnPlayer();
+        SpawnEnenmy();
     }
     public void SpawnEnenmy()
     {

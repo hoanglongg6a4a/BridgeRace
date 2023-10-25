@@ -11,6 +11,8 @@ public class Bridge : MonoBehaviour
     [SerializeField] private Stage stage;
     [SerializeField] private bool isLock = false;
     [SerializeField] private Material material;
+    [SerializeField] private Transform playerOwnBridge;
+    private bool IsWaitPass = false;
     public bool IsLock { get => isLock; }
     public List<BrickBridge> BrickBridges { get => brickBridges; }
     public bool CheckCompleteBuild(MaterialColor brickColor) => brickBridges.All(n => n.MaterialColor.BrickColor == brickColor.BrickColor);
@@ -19,6 +21,19 @@ public class Bridge : MonoBehaviour
         foreach (BrickBridge brick in brickBridges)
         {
             brick.Init(CheckCompleteBuild, NextStage, this);
+        }
+    }
+    private void Update()
+    {
+        if (IsWaitPass)
+        {
+            Debug.Log("có vào");
+            // Debug
+            if ((playerOwnBridge.position.z - gateOut.gameObject.transform.position.z) > 0.1f)
+            {
+                IsWaitPass = false;
+                CloseGate();
+            }
         }
     }
     public void NextStage(MaterialColor color)
@@ -41,5 +56,14 @@ public class Bridge : MonoBehaviour
     {
         List<BrickBridge> listBrickDiffColor = brickBridges.Where(n => !(n.MaterialColor.BrickColor.Equals(color)) && !(n.MaterialColor.BrickColor.Equals(BrickColor.None))).ToList();
         return listBrickDiffColor.Count;
+    }
+    public void SetOwner(Transform playerOwnBridge, MaterialColor color)
+    {
+        Debug.Log("có vào set owner");
+        isLock = true;
+        IsWaitPass = true;
+        gateOut.SetActive(false);
+        this.playerOwnBridge = playerOwnBridge;
+        this.material = color.Material;
     }
 }

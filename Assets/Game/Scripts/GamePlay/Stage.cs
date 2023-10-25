@@ -29,15 +29,11 @@ public class Stage : MonoBehaviour
     private List<Brick> listBrickRandom = new();
     public List<Brick> ListBrick { get => listBrick; set => listBrick = value; }
     public List<Bridge> ListBridge { get => listBridge; set => listBridge = value; }
-
-    void Start()
-    {
-        SpawnBrick();
-    }
     public void Init(List<MaterialColor> listMaterial, int index)
     {
         this.listMaterial = listMaterial;
         this.index = index;
+        SpawnBrick();
     }
     public void CheckStageIndex()
     {
